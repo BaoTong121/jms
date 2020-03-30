@@ -88,4 +88,3 @@ def login_(request):
 def logout_(request):
     logout(request)
     return HttpResponseRedirect(reverse('users:login'))
-# Create your views here.
