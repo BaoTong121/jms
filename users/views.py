@@ -18,16 +18,16 @@ def user_add(request):
     form = UserAddForm(request.POST)
 
     if form.is_valid():
-        # username = form.cleaned_data['username']
-        #password = form.cleaned_data['password']
-        password = form.data['password']
+        username = form.data['username'].strip()
+        password = form.data['password'].strip()
+
         user = form.save(commit=False)
         user.password = make_password(password)
-        # user_in_server = ServerUserManager(Bash)
-        # ret, msg = user_in_server.present(username=username,
-        #                                   password=password,
-        #                                   shell=CONNECTPY_PATH)
-        # if not ret:
+        user_in_server = ServerUserManager(Bash)
+        ret, msg = user_in_server.present(username=username,
+                                           password=password,
+                                           shell=CONNECTPY_PATH)
+    if not ret:
         user.save()
         return HttpResponseRedirect(reverse('users:list'))
     else:
@@ -50,9 +50,16 @@ def user_update(request, user_id):
     if request.method == "POST":
         form = UserUpdateForm(request.POST, instance=user)
         if form.is_valid():
+            password = form.data['password'].strip()
             user = form.save(commit=False)
+            if password:
+                user.set_password(make_password(password))
+                user_in_server = ServerUserManager(Bash)
+                ret, msg = user_in_server.present(username=user.username, password=user.password)
+                if ret:
+                    return HttpResponse(msg)
             user.save()
-        return HttpResponseRedirect(reverse('users:list'))
+            return HttpResponseRedirect(reverse('users:list'))
     form = UserUpdateForm(instance=user)
     return render(request, 'users/update.html', {'form': form})
 
