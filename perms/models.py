@@ -4,7 +4,7 @@ from assets.models import Assets
 from django.conf import settings
 
 
-class Perm(models.Model):
+class Perms(models.Model):
     name = models.CharField(max_length=64, verbose_name="名称")
     user = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='用户')
     asset = models.ManyToManyField(Assets, verbose_name='资产')
