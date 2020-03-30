@@ -22,7 +22,7 @@ class PermsListView(LoginRequiredMixin, ListView):
 
 class PermsCreateView(LoginRequiredMixin, CreateView):
     model = Perms
-    form = PermsForm()
+    form_class = PermsForm
     success_url = reverse_lazy('perms/list.html')
 
     def get(self, request, *args, **kwargs):
