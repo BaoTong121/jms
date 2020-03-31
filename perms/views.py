@@ -23,7 +23,7 @@ class PermsListView(LoginRequiredMixin, ListView):
 class PermsCreateView(LoginRequiredMixin, CreateView):
     model = Perms
     form_class = PermsForm
-    success_url = reverse_lazy('perms/list.html')
+    success_url = reverse_lazy("perms:list")
 
     def get(self, request, *args, **kwargs):
         return HttpResponse("Method not support", status=405)
